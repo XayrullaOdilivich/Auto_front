@@ -4,14 +4,14 @@ import SidebarSlot from "@/components/SidebarSlot.vue";
 
 <template>
     <sidebar-slot>
-        <router-link class="link" to="/admin/categories">Categoriy </router-link>
-        <h1>Categoriylar nazorati</h1>
-        <router-link to="/admin/categoriy" class="menu-link">
+        <router-link class="link" to="/admin/categories">Locations </router-link>
+        <h1>Locations</h1>
+        <router-link to="/admin/location/create" class="menu-link">
             <div class="menu">
                 Yaratish
             </div>
         </router-link>
-        <router-link to="/admin/categoriy" class="menu-link">
+        <router-link to="/admin/location/update" class="menu-link">
             <div class="menu">
                 O'zgertirish
             </div>
@@ -21,7 +21,7 @@ import SidebarSlot from "@/components/SidebarSlot.vue";
                 Barchasini Ko'rish
             </div>
         </router-link>
-        <router-link to="/admin/categoriy" class="menu-link">
+        <router-link to="/admin/location/delete" class="menu-link">
             <div class="menu">
                 O'chirish
             </div>
@@ -37,6 +37,8 @@ h1 {
 }
 
 .menu {
+    border: 2px solid white;
+    box-shadow: 9px 0 20px rgba(0, 0, 0, 0.1);
     display: flex;
     align-items: center;
     padding: 10px;
@@ -45,16 +47,16 @@ h1 {
     font-size: 20px;
     transition: background-color 0.3s ease;
     margin: 30px;
-
+    text-align: center;
 }
 
 .link {
-    color: slategrey;
+    color: #667085;
     margin: 30px;
 }
 
 a {
-    color: teal;
+    color: blue;
     font-weight: bold;
     text-decoration: none;
 }

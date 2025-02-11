@@ -1,9 +1,10 @@
 <script setup>
-import LoginComponent from "@/components/LoginComponent.vue";
 </script>
 
 <template>
-    <router-view></router-view> <!-- Sahifalarni router orqali yuklash -->
+    <div class="app">
+        <router-view></router-view>
+    </div>
 </template>
 
 <style scoped>

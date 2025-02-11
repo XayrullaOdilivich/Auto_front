@@ -1,0 +1,45 @@
+<script setup>
+
+import SidebarSlot from "@/components/SidebarSlot.vue";
+</script>
+
+<template>
+    <sidebar-slot>
+        <div class="container">
+            <h1 class="title">Create_Brand</h1>
+            <div class="form">
+                <label for="exampleFormControlInput1" class="form-label">Nomi</label>
+                <input
+                    type="text"
+                    class="form-control"
+                    aria-label="Sizing example input"
+                       aria-describedby="inputGroup-sizing-sm"
+                       required
+                >
+                <div>
+                    <label for="formFileLg" class="form-label">Brand rsmini tanlang</label>
+                    <input class="form-control form-control-lg" id="formFileLg" type="file">
+                </div>
+                <button type="button" class="btn btn-success">Yuborish</button>
+            </div>
+        </div>
+    </sidebar-slot>
+</template>
+
+<style scoped>
+.form {
+    text-align: center;
+}
+
+h1 {
+    margin: 30px;
+}
+
+input, button {
+    outline: none;
+    margin: 5px auto 20px auto;
+    display: block;
+    width: 40%;
+}
+
+</style>

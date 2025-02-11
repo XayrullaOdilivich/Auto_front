@@ -17,27 +17,27 @@
                     Categories
                 </div>
             </router-link>
-            <router-link to="/admin/create-course" class="menu-link">
+            <router-link to="/admin/brand" class="menu-link">
                 <div class="menu">
                     Brands
                 </div>
             </router-link>
-            <router-link to="/admin/settings" class="menu-link">
+            <router-link to="/admin/cities" class="menu-link">
                 <div class="menu">
                     Cities
                 </div>
             </router-link>
-            <router-link to="/admin/settings" class="menu-link">
+            <router-link to="/admin/location" class="menu-link">
                 <div class="menu">
                     Locations
                 </div>
             </router-link>
-            <router-link to="/admin/settings" class="menu-link">
+            <router-link to="/admin/car" class="menu-link">
                 <div class="menu">
                     Cars
                 </div>
             </router-link>
-            <router-link to="/admin/settings" class="menu-link">
+            <router-link to="/admin/model" class="menu-link">
                 <div class="menu">
                     Models
                 </div>
