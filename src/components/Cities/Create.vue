@@ -1,6 +1,41 @@
 <script setup>
+import { ref } from 'vue'
+import SidebarSlot from "@/components/SidebarSlot.vue"
+import { useCreateStore } from "@/vuex/create.js"
 
-import SidebarSlot from "@/components/SidebarSlot.vue";
+const createStore = useCreateStore()
+const createData = ref({
+    name: '',
+    images: null,
+    text: '',
+})
+
+const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        createData.value.images = file;
+    }
+}
+const cities = async () => {
+    try {
+        const formData = new FormData();
+        formData.append("name", createData.value.name);
+        formData.append("text", createData.value.text);
+        formData.append("images", createData.value.images);
+
+        await createStore.fetchPost("/cities", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+
+        alert("Cities successfully created successfully.!");
+
+    } catch (error) {
+        console.error("Xatolik:", error);
+    }
+};
+
 </script>
 
 <template>
@@ -10,6 +45,7 @@ import SidebarSlot from "@/components/SidebarSlot.vue";
             <div class="form">
                 <label for="exampleFormControlInput1" class="form-label">Nomi</label>
                 <input
+                    v-model="createData.name"
                     type="text"
                     class="form-control"
                     aria-label="Sizing example input"
@@ -18,6 +54,7 @@ import SidebarSlot from "@/components/SidebarSlot.vue";
                 >
                 <label for="description" class="form-label">Text</label>
                 <textarea
+                    v-model="createData.text"
                     id="description"
                     class="form-control"
                     rows="4"
@@ -26,9 +63,14 @@ import SidebarSlot from "@/components/SidebarSlot.vue";
 
                 <div>
                     <label for="formFileLg" class="form-label">Rasimini Kiriting</label>
-                    <input class="form-control form-control-lg" id="formFileLg" type="file">
+                    <input
+                        class="form-control form-control-lg"
+                        id="formFileLg"
+                        type="file"
+                        @change="handleFileChange"
+                    >
                 </div>
-                <button type="button" class="btn btn-success">Yuborish</button>
+                <button type="button" @click="cities" class="btn btn-success">Yuborish</button>
             </div>
         </div>
     </sidebar-slot>

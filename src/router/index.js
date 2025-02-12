@@ -43,6 +43,11 @@ const router = createRouter({
       component: () => import('@/components/Categoriy/Update.vue')
     },
     {
+      path: '/admin/categoriy/get',
+      name: 'category-get',
+      component: () => import('@/components/Categoriy/Get.vue')
+    },
+    {
       path: '/admin/categoriy/delete',
       name: 'category-delete',
       component: () => import('@/components/Categoriy/Delete.vue')
@@ -62,6 +67,11 @@ const router = createRouter({
       path: '/admin/brand/update',
       name: 'brand-update',
       component: () => import('@/components/Brands/Update.vue')
+    },
+    {
+      path: '/admin/brand/get',
+      name: 'brand-get',
+      component: () => import('@/components/Brands/Get.vue')
     },
     {
       path: '/admin/brand/delete',
@@ -85,6 +95,11 @@ const router = createRouter({
       component: () => import('@/components/Cities/Update.vue')
     },
     {
+      path: '/admin/cities/get',
+      name: 'cities-get',
+      component: () => import('@/components/Cities/Get.vue')
+    },
+    {
       path: '/admin/cities/delete',
       name: 'cities-delete',
       component: () => import('@/components/Cities/Delete.vue')
@@ -104,6 +119,11 @@ const router = createRouter({
       path: '/admin/location/update',
       name: 'location-update',
       component: () => import('@/components/Locations/Update.vue')
+    },
+    {
+      path: '/admin/location/get',
+      name: 'location-get',
+      component: () => import('@/components/Locations/Get.vue')
     },
     {
       path: '/admin/location/delete',

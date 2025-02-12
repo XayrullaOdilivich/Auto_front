@@ -36,14 +36,6 @@ export const useAuthStore= defineStore({
 
             }
         },
-        logout() {
-            this.accessToken = null;
-            this.refreshToken = null;
-            localStorage.removeItem('accessToken');
-            localStorage.removeItem('refreshToken');
-            window.location.href = "/login"; // Logoutdan keyin login sahifasiga yo‘naltirish
-        }
-
     },
     getters: {
         getToken: (state) => state.accessToken,

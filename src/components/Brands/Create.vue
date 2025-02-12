@@ -1,6 +1,41 @@
 <script setup>
+import { ref } from 'vue'
+import SidebarSlot from "@/components/SidebarSlot.vue"
+import { useCreateStore } from "@/vuex/create.js"
 
-import SidebarSlot from "@/components/SidebarSlot.vue";
+const createStore = useCreateStore()
+const createData = ref({
+    title: '',
+    images: null
+})
+
+const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        createData.value.images = file;
+        console.log("Yuklangan fayl:", file);
+    }
+}
+const brands = async () => {
+    try {
+        const formData = new FormData();
+        formData.append("title", createData.value.title);
+        formData.append("images", createData.value.images);
+
+        await createStore.fetchPost("/brands", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+        alert("Brand successfully created successfully.!");
+
+
+
+    } catch (error) {
+        console.error("Xatolik:", error);
+    }
+};
+
 </script>
 
 <template>
@@ -10,17 +45,23 @@ import SidebarSlot from "@/components/SidebarSlot.vue";
             <div class="form">
                 <label for="exampleFormControlInput1" class="form-label">Nomi</label>
                 <input
+                    v-model="createData.title"
                     type="text"
                     class="form-control"
                     aria-label="Sizing example input"
-                       aria-describedby="inputGroup-sizing-sm"
-                       required
+                   aria-describedby="inputGroup-sizing-sm"
+                   required
                 >
                 <div>
                     <label for="formFileLg" class="form-label">Brand rsmini tanlang</label>
-                    <input class="form-control form-control-lg" id="formFileLg" type="file">
+                    <input
+                        class="form-control form-control-lg"
+                        id="formFileLg"
+                        type="file"
+                        @change="handleFileChange"
+                    >
                 </div>
-                <button type="button" class="btn btn-success">Yuborish</button>
+                <button type="button" @click="brands" class="btn btn-success">Yuborish</button>
             </div>
         </div>
     </sidebar-slot>
