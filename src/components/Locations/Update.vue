@@ -1,19 +1,25 @@
 <script setup>
-import {onMounted, ref} from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import SidebarSlot from "@/components/SidebarSlot.vue"
 import { useGetStore } from "@/vuex/categoryStore.js"
-import {useUpdateStore} from "@/vuex/update.js"
+import { useUpdateStore } from "@/vuex/update.js"
 
-const selectedLocations = ref("")
-const locationsStore = useGetStore()
+const selectedCityId = ref("")
+const citiesStore = useGetStore()
 const updateStore = useUpdateStore()
+
 const updateData = ref({
     name: '',
     text: '',
-    images: null,
+    images: null
 })
+
 onMounted(async () => {
-    await locationsStore.fetchData('/locations')
+    await citiesStore.fetchData('/locations')
+})
+
+const selectedCity = computed(() => {
+    return citiesStore.data.find(city => city.id === selectedCityId.value) || { name: '', text: '' }
 })
 
 const handleFileChange = (event) => {
@@ -23,20 +29,24 @@ const handleFileChange = (event) => {
         console.log("Yuklangan fayl:", file)
     }
 }
-const locations = async () => {
+
+const updateCity = async () => {
     try {
         const formData = new FormData();
-        formData.append("name", updateData.value.name);
-        formData.append("text", updateData.value.text);
-        formData.append("images", updateData.value.images);
+        formData.append("name", updateData.value.name || selectedCity.value.name);
+        formData.append("text", updateData.value.text || selectedCity.value.text);
+        if (updateData.value.images) {
+            formData.append("images", updateData.value.images);
+        }
 
-        await updateStore.fetchPut(`/locations/${selectedLocations.value}`, formData, {
+        await updateStore.fetchPut(`/locations/${selectedCityId.value}`, formData, {
             headers: {
                 "Content-Type": "multipart/form-data",
             },
         });
-        await locationsStore.fetchData("/locations")
-        alert('Locations successfully updated successfully.!')
+
+        await citiesStore.fetchData("/locations")
+        alert('Location updated successfully!')
         console.log("Yaratildi");
     } catch (error) {
         console.error("Xatolik:", error);
@@ -47,46 +57,44 @@ const locations = async () => {
 <template>
     <sidebar-slot>
         <div class="container">
-            <h1 class="title">Update_Locations</h1>
+            <h1 class="title">Update Location</h1>
             <div class="form">
-                <label for="exampleFormControlInput1" class="form-label">Tanlang</label>
-                <select v-model="selectedLocations" class="form-select form-select-lg mb-3" aria-label="Large select example">
+                <label class="form-label">Tanlang</label>
+                <select v-model="selectedCityId" class="form-select form-select-lg mb-3">
                     <option
-                        v-for="locations in locationsStore.data"
-                        :key="locations.id"
-                        :value="locations.id">
-                        {{ locations.name }}
+                        v-for="city in citiesStore.data"
+                        :key="city.id"
+                        :value="city.id">
+                        {{ city.name }}
                     </option>
-
                 </select>
-                <label for="exampleFormControlInput1" class="form-label">Nomi</label>
+
+                <label class="form-label">Nomi</label>
                 <input
-                    v-model="selectedLocations.name"
+                    v-model="updateData.name"
                     type="text"
                     class="form-control"
-                    aria-label="Sizing example input"
-                    aria-describedby="inputGroup-sizing-sm"
                     required
                 >
-                <label for="description" class="form-label">Text</label>
+
+                <label class="form-label">Text</label>
                 <textarea
-                    v-model="selectedLocations.text"
-                    id="description"
+                    v-model="updateData.text"
                     class="form-control"
                     rows="4"
                     placeholder="Tavsif kiriting..."
                 ></textarea>
 
                 <div>
-                    <label for="formFileLg" class="form-label">Rasimini Kiriting</label>
+                    <label class="form-label">Rasm yuklash</label>
                     <input
-                        class="form-control form-control-lg"
-                        id="formFileLg"
+                        class="form-control"
                         type="file"
                         @change="handleFileChange"
                     >
                 </div>
-                <button type="button" @click="locations" class="btn btn-success">O'zgartirsh</button>
+
+                <button type="button" @click="updateCity" class="btn btn-success">O'zgartirish</button>
             </div>
         </div>
     </sidebar-slot>
@@ -101,11 +109,11 @@ h1 {
     margin: 30px;
 }
 
-input,textarea, select, button {
+input, textarea, select, button {
     outline: none;
     margin: 5px auto 20px auto;
     display: block;
     width: 40%;
 }
-
 </style>
+

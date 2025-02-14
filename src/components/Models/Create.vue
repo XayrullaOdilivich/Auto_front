@@ -1,33 +1,74 @@
 <script setup>
+import { onMounted, ref } from 'vue'
+import SidebarSlot from "@/components/SidebarSlot.vue"
+import { useGetStore } from "@/vuex/categoryStore.js"
+import { useCreateStore } from "@/vuex/create.js"
 
-import SidebarSlot from "@/components/SidebarSlot.vue";
+const brandStore = useGetStore()
+const updateStore = useCreateStore()
+
+const updateData = ref({
+    name: '',
+    brand_id: ''
+})
+
+onMounted(async () => {
+    await brandStore.fetchData('/brands')
+})
+
+const models = async () => {
+    try {
+        const formData = new FormData();
+        formData.append("name", updateData.value.name);
+        formData.append("brand_id", updateData.value.brand_id);
+
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]);
+        }
+
+        await updateStore.fetchPost(`/models`, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+
+        alert("Model successfully created!");
+
+        await brandStore.fetchData("/brands")
+    } catch (error) {
+        console.error("Xatolik:", error);
+    }
+};
 </script>
 
 <template>
     <sidebar-slot>
         <div class="container">
-            <h1 class="title">Create_Models</h1>
+            <h1 class="title">Create Models</h1>
             <div class="form">
-                <label for="exampleFormControlInput1" class="form-label">Model nomi</label>
+                <label class="form-label">Model nomi</label>
                 <input
+                    v-model="updateData.name"
                     type="text"
                     class="form-control"
-                    aria-label="Sizing example input"
-                       aria-describedby="inputGroup-sizing-sm"
-                       required
+                    required
                 >
-                <label for="exampleFormControlInput1" class="form-label">Qaysi brandga tegishli</label>
-                <select class="form-select form-select-lg mb-3" aria-label="Large select example">
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+
+                <label class="form-label">Qaysi brandga tegishli</label>
+                <select v-model="updateData.brand_id" class="form-select">
+                    <option v-for="brand in brandStore.data"
+                            :key="brand.id"
+                            :value="brand.id">
+                        {{ brand.title }}
+                    </option>
                 </select>
 
-                <button type="button" class="btn btn-success">Yuborish</button>
+                <button type="button" @click="models" class="btn btn-success">Yuborish</button>
             </div>
         </div>
     </sidebar-slot>
 </template>
+
 
 <style scoped>
 .form {
