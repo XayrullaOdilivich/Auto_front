@@ -100,7 +100,6 @@ const createCar = async () => {
         console.log("xatolik", error)
     }
 }
-
 </script>
 
 <template>
