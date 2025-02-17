@@ -2,7 +2,13 @@
 import { ref } from 'vue'
 import SidebarSlot from "@/components/SidebarSlot.vue"
 import { useCreateStore } from "@/vuex/create.js"
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
+
+const goBack = () => {
+    router.back();
+};
 const createStore = useCreateStore()
 const createData = ref({
     name: '',
@@ -40,6 +46,10 @@ const cities = async () => {
 
 <template>
     <sidebar-slot>
+        <div>
+            <button @click="goBack" class="back-btn">⬅️ Ortga</button>
+            <slot></slot> <!-- Sahifaning asosiy mazmuni -->
+        </div>
         <div class="container">
             <h1 class="title">Create_Cities</h1>
             <div class="form">
@@ -80,7 +90,20 @@ const cities = async () => {
 .form {
     text-align: center;
 }
+.back-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 15px;
+}
 
+.back-btn:hover {
+    background-color: #0056b3;
+}
 h1 {
     margin: 30px;
 }

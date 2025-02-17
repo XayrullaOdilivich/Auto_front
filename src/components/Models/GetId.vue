@@ -2,7 +2,13 @@
 import {ref, onMounted, computed} from "vue";
 import SidebarSlot from "@/components/SidebarSlot.vue";
 import {useDynamicStore} from "@/vuex/store.js";
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
+
+const goBack = () => {
+    router.back();
+};
 const store = useDynamicStore()
 const models = ref([]);
 const selectedModel = ref("");
@@ -28,6 +34,10 @@ const fetchModelById = async () => {
 
 <template>
     <sidebar-slot>
+        <div>
+            <button @click="goBack" class="back-btn">⬅️ Ortga</button>
+            <slot></slot> <!-- Sahifaning asosiy mazmuni -->
+        </div>
         <div class="container">
             <h1 class="title">Model ma’lumotlari</h1>
 
@@ -109,6 +119,20 @@ input, select, button {
     margin: 5px auto 20px auto;
     display: block;
     width: 40% !important;
+}
+.back-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 15px;
+}
+
+.back-btn:hover {
+    background-color: #0056b3;
 }
 
 button:hover {

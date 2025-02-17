@@ -15,18 +15,11 @@ const router = createRouter({
       path: '/login',
       component: () => import('@/components/LoginComponent.vue')
     },
-
     {
       path: '/admin',
-      component: () => import('@/Page/AdminPage.vue'),
-      beforeEnter: (to, from, next) => {
-        if (!isAuthenticated()) {
-          next('/login');
-        } else {
-          next();
-        }
-      }
+      component: () => import('@/Page/AdminPage.vue')
     },
+
     {
       path: '/admin/categoriy',
       name: 'category',
@@ -194,5 +187,13 @@ const router = createRouter({
     }
   ],
 })
+
+router.beforeEach((to, from, next) => {
+  if (to.path.startsWith('/admin') && !isAuthenticated()) {
+    next('/login');
+  } else {
+    next();
+  }
+});
 
 export default router

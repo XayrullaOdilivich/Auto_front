@@ -3,6 +3,13 @@ import {ref, onMounted, computed} from "vue"
 import { useDelete } from "@/vuex/delete.js"
 import SidebarSlot from "@/components/SidebarSlot.vue"
 import {useDynamicStore} from "@/vuex/store.js";
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+const goBack = () => {
+    router.back();
+};
 
 const brandStore = useDynamicStore()
 const deleteStore = useDelete()
@@ -33,6 +40,10 @@ const deleteBrand = async () => {
 
 <template>
     <sidebar-slot>
+        <div>
+            <button @click="goBack" class="back-btn">⬅️ Ortga</button>
+            <slot></slot> <!-- Sahifaning asosiy mazmuni -->
+        </div>
         <div class="container">
             <h1 class="title">Delete_Brand</h1>
             <div class="form">
@@ -64,5 +75,19 @@ select, label, button {
     margin: 5px auto 20px auto;
     display: block;
     width: 40%;
+}
+.back-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 15px;
+}
+
+.back-btn:hover {
+    background-color: #0056b3;
 }
 </style>

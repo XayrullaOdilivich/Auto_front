@@ -1,10 +1,20 @@
 <script setup>
 import SidebarSlot from "@/components/SidebarSlot.vue";
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+const goBack = () => {
+    router.back();
+};
 </script>
 
 <template>
     <sidebar-slot>
-        <router-link class="link" to="/admin/categories">Cars </router-link>
+        <div>
+            <button @click="goBack" class="back-btn">⬅️ Ortga</button>
+            <slot></slot> <!-- Sahifaning asosiy mazmuni -->
+        </div>
         <h1>Cars</h1>
         <router-link to="/admin/car/create" class="menu-link">
             <div class="menu">
@@ -58,6 +68,21 @@ h1 {
 .link {
     color: #667085;
     margin: 30px;
+}
+
+.back-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 15px;
+}
+
+.back-btn:hover {
+    background-color: #0056b3;
 }
 
 a {
