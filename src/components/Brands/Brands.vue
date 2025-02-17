@@ -10,11 +10,12 @@ const goBack = () => {
 </script>
 
 <template>
-    <sidebar-slot><h1>Brands</h1>
+    <sidebar-slot>
         <div>
             <button @click="goBack" class="back-btn">⬅️ Ortga</button>
             <slot></slot> <!-- Sahifaning asosiy mazmuni -->
         </div>
+        <h1>Brands</h1>
         <router-link to="/admin/brand/create" class="menu-link">
             <div class="menu">
                 Yaratish
