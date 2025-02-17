@@ -1,30 +1,32 @@
 <script setup>
-import { ref, onMounted } from "vue"
+import {ref, onMounted, computed} from "vue"
 import { useDelete } from "@/vuex/delete.js"
-import { useGetStore } from "@/vuex/categoryStore.js"
 import SidebarSlot from "@/components/SidebarSlot.vue"
+import {useDynamicStore} from "@/vuex/store.js";
 
-const citiesStore = useGetStore()
+const store = useDynamicStore()
 const deleteStore = useDelete()
-const selectedCities = ref("")
+const selectedLocations = ref("")
+
+const locations = computed(() => store.data.locations?.data)
 
 onMounted(async () => {
-    await citiesStore.fetchData("/locations")
+    await store.fetchData('locations','/locations')
 });
 
-const deleteCities = async () => {
-    if (!selectedCities.value) {
+const deleteLocations = async () => {
+    if (!selectedLocations.value) {
         alert("Kategoriya tanlang!")
         return;
     }
 
     try {
-        await deleteStore.Delete(`/locations/${selectedCities.value}`)
-        alert("Cities  o‘chirildi!");
+        await deleteStore.Delete(`/locations/${selectedLocations.value}`)
+        alert("Locations  o‘chirildi!");
 
-        await citiesStore.fetchData("/locations")
+        await store.fetchData('locations','/locations')
     } catch (error) {
-        console.error("Cities o‘chirishda xatolik:", error);
+        console.error("Locations o‘chirishda xatolik:", error);
     }
 };
 </script>
@@ -35,14 +37,14 @@ const deleteCities = async () => {
             <h1 class="title">Delete_Location</h1>
             <div class="form">
                 <label for="exampleFormControlInput1" class="form-label">Qaysini o'chirmoqchisiz:</label>
-                <select v-model="selectedCities" class="form-select">
-                    <option v-for="cities in citiesStore.data"
-                            :key="cities.id"
-                            :value="cities.id">
-                        {{ cities.name }}
+                <select v-model="selectedLocations" class="form-select">
+                    <option v-for="Locations in locations"
+                            :key="Locations.id"
+                            :value="Locations.id">
+                        {{ Locations.name }}
                     </option>
                 </select>
-                <button type="button" @click="deleteCities" class="btn btn-danger">O'chrish</button>
+                <button type="button" @click="deleteLocations" class="btn btn-danger">O'chrish</button>
             </div>
         </div>
     </sidebar-slot>

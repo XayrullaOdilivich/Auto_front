@@ -6,7 +6,7 @@ import SidebarSlot from "@/components/SidebarSlot.vue";
     <sidebar-slot>
         <router-link class="link" to="/admin/categories">Cars </router-link>
         <h1>Cars</h1>
-        <router-link to="/admin/categoriy" class="menu-link">
+        <router-link to="/admin/car/create" class="menu-link">
             <div class="menu">
                 Yaratish
             </div>
@@ -16,12 +16,12 @@ import SidebarSlot from "@/components/SidebarSlot.vue";
                 O'zgartirish
             </div>
         </router-link>
-        <router-link to="/admin/categoriy" class="menu-link">
+        <router-link to="/admin/car/get" class="menu-link">
             <div class="menu">
                 Barchasini Ko'rish
             </div>
         </router-link>
-        <router-link to="/admin/categoriy" class="menu-link">
+        <router-link to="/admin/car/get-id" class="menu-link">
             <div class="menu">
                 ID bo'yicha ko'rish
             </div>

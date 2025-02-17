@@ -1,15 +1,17 @@
 <script setup>
-import { ref, onMounted } from "vue"
+import {ref, onMounted, computed} from "vue"
 import { useDelete } from "@/vuex/delete.js"
-import { useGetStore } from "@/vuex/categoryStore.js"
 import SidebarSlot from "@/components/SidebarSlot.vue"
+import {useDynamicStore} from "@/vuex/store.js";
 
-const citiesStore = useGetStore()
+const store = useDynamicStore()
 const deleteStore = useDelete()
 const selectedCities = ref("")
 
+const city = computed(() => store.data.city?.data)
+
 onMounted(async () => {
-    await citiesStore.fetchData("/cities")
+    await store.fetchData('city',"/cities")
 });
 
 const deleteCities = async () => {
@@ -22,7 +24,7 @@ const deleteCities = async () => {
         await deleteStore.Delete(`/cities/${selectedCities.value}`)
         alert("Cities  o‘chirildi!");
 
-        await citiesStore.fetchData("/cities")
+        await store.fetchData('city',"/cities")
     } catch (error) {
         console.error("Cities o‘chirishda xatolik:", error);
     }
@@ -36,7 +38,7 @@ const deleteCities = async () => {
             <div class="form">
                 <label for="exampleFormControlInput1" class="form-label">Qaysini o'chirmoqchisiz:</label>
                 <select v-model="selectedCities" class="form-select">
-                    <option v-for="cities in citiesStore.data"
+                    <option v-for="cities in city"
                             :key="cities.id"
                             :value="cities.id">
                         {{ cities.name }}

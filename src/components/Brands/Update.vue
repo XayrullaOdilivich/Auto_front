@@ -1,19 +1,21 @@
 <script setup>
-import {onMounted, ref} from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import SidebarSlot from "@/components/SidebarSlot.vue"
-import { useGetStore } from "@/vuex/categoryStore.js"
-import {useUpdateStore} from "@/vuex/update.js"
+import { useUpdateStore } from "@/vuex/update.js"
+import { useDynamicStore } from "@/vuex/store.js"
 
 const selectedBrands = ref("")
-const brandStore = useGetStore()
+const brandStore = useDynamicStore()
 const updateStore = useUpdateStore()
 const updateData = ref({
     title: '',
     images: null
 })
 
+const brands = computed(() => brandStore?.data?.brands?.data || [])
+
 onMounted(async () => {
-    await brandStore.fetchData('/brands')
+    await brandStore.fetchData('brands', '/brands')
 })
 
 const handleFileChange = (event) => {
@@ -23,7 +25,8 @@ const handleFileChange = (event) => {
         console.log("Yuklangan fayl:", file)
     }
 }
-const brands = async () => {
+
+const updateBrand = async () => {
     try {
         const formData = new FormData();
         formData.append("title", updateData.value.title);
@@ -34,16 +37,16 @@ const brands = async () => {
                 "Content-Type": "multipart/form-data",
             },
         });
-        alert("Brand successfully updated successfully.!");
 
-        await brandStore.fetchData("/brands")
+        alert("Brand successfully updated!");
+
+        await brandStore.fetchData('brands', "/brands");
 
         console.log("Yaratildi");
     } catch (error) {
         console.error("Xatolik:", error);
     }
-};
-
+}
 </script>
 
 <template>
@@ -53,12 +56,14 @@ const brands = async () => {
             <div class="form">
                 <label for="exampleFormControlInput1" class="form-label">Qasyi birini o'zgartirasiz:</label>
                 <select v-model="selectedBrands" class="form-select">
-                    <option v-for="category in brandStore.data"
-                            :key="category.id"
-                            :value="category.id">
-                        {{ category.title }}
+                    <option
+                        v-for="brand in brands"
+                        :key="brand.id"
+                        :value="brand.id">
+                        {{ brand.title }}
                     </option>
                 </select>
+
                 <label for="exampleFormControlInput1" class="form-label">Nomi</label>
                 <input
                     v-model="updateData.title"
@@ -77,7 +82,7 @@ const brands = async () => {
                         @change="handleFileChange"
                     >
                 </div>
-                <button type="button" @click="brands" class="btn btn-success">O'zgartirish</button>
+                <button type="button" @click="updateBrand" class="btn btn-success">O'zgartirish</button>
             </div>
         </div>
     </sidebar-slot>

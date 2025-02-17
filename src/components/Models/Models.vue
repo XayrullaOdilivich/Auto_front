@@ -16,12 +16,12 @@ import SidebarSlot from "@/components/SidebarSlot.vue";
                 O'zgartirish
             </div>
         </router-link>
-        <router-link to="/admin/categoriy" class="menu-link">
+        <router-link to="/admin/model/get" class="menu-link">
             <div class="menu">
                 Barchasini Ko'rish
             </div>
         </router-link>
-        <router-link to="/admin/categoriy" class="menu-link">
+        <router-link to="/admin/model/get-id" class="menu-link">
             <div class="menu">
                 ID bo'yicha ko'rish
             </div>

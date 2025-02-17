@@ -1,24 +1,23 @@
-
 <script setup>
-import {ref, onMounted, computed} from "vue";
+import { ref, onMounted } from "vue";
 import SidebarSlot from "@/components/SidebarSlot.vue";
 import {useDynamicStore} from "@/vuex/store.js";
 
 const store = useDynamicStore()
-const locations = ref([]);
+const models = ref([]);
 
 onMounted(async () => {
-    await store.fetchData('locations','/locations');
-    locations.value = store.data.locations?.data
+    await store.fetchData('models',"/models");
+    models.value = store.data?.models?.data
 });
 </script>
 
 <template>
     <sidebar-slot>
         <div class="container">
-            <h1 class="title">Lokatsiyalar ro‘yxati</h1>
+            <h1 class="title">Modellar ro‘yxati</h1>
 
-            <div v-if="locations.length">
+            <div v-if="models.length">
                 <div class="table-container">
                     <table class="table">
                         <thead>
@@ -26,28 +25,24 @@ onMounted(async () => {
                             <th>No.</th>
                             <th>ID</th>
                             <th>Nomi</th>
-                            <th>Text</th>
-                            <th>Rasm</th>
+                            <th>Brandi</th>
                             <th>Yaratilgan vaqti</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="(location, idx) in locations" :key="location.id">
+                        <tr v-for="(model, idx) in models" :key="model.id">
                             <td>{{ idx + 1 }}</td> <!-- No. ustuni qo‘shildi -->
-                            <td>{{ location.id }}</td>
-                            <td>{{ location.name }}</td>
-                            <td>{{ location.text }}</td>
-                            <td>
-                                <img v-if="location.image_src" :src="location.image_src" alt="Lokatsiya rasmi" width="80">
-                            </td>
-                            <td>{{ location.created_at }}</td>
+                            <td>{{ model.id }}</td>
+                            <td>{{ model.name }}</td>
+                            <td>{{ model.brand_title }}</td>
+                            <td>{{ model.created_at }}</td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
             <div v-else>
-                <p>🚫 Hali hech qanday lokatsiya yo‘q.</p>
+                <p>🚫 Hali hech qanday Modellar yo‘q.</p>
             </div>
         </div>
     </sidebar-slot>

@@ -1,11 +1,11 @@
 <script setup>
-import {onMounted, ref} from 'vue'
+import {computed, onMounted, ref} from 'vue'
 import SidebarSlot from "@/components/SidebarSlot.vue"
-import { useGetStore } from "@/vuex/categoryStore.js"
 import {useUpdateStore} from "@/vuex/update.js"
+import {useDynamicStore} from "@/vuex/store.js";
 
 const selectedCategory = ref("")
-const categoryStore = useGetStore()
+const store = useDynamicStore()
 const updateStore = useUpdateStore()
 const updateData = ref({
     name_en: '',
@@ -13,8 +13,11 @@ const updateData = ref({
     images: null
 })
 
+const category = computed(() => store.data?.category?.data)
+
 onMounted(async () => {
-    await categoryStore.fetchData('/categories')
+    await store.fetchData('category','/categories')
+
 })
 
 const handleFileChange = (event) => {
@@ -24,7 +27,7 @@ const handleFileChange = (event) => {
         console.log("Yuklangan fayl:", file)
     }
 }
-const categories = async () => {
+const updateCategories = async () => {
     try {
         const formData = new FormData();
         formData.append("name_en", updateData.value.name_en);
@@ -36,9 +39,9 @@ const categories = async () => {
                 "Content-Type": "multipart/form-data",
             },
         });
-        await categoryStore.fetchData("/categories")
+        await store.fetchData('category','/categories')
         alert('Category successfully updated successfully.!')
-        console.log("Yaratildi");
+        console.log("O'zgartirildi");
     } catch (error) {
         console.error("Xatolik:", error);
     }
@@ -52,7 +55,7 @@ const categories = async () => {
             <div class="form">
                 <label for="exampleFormControlInput1" class="form-label">Qasyi birini o'zgartirasiz:</label>
                 <select v-model="selectedCategory" class="form-select">
-                    <option v-for="category in categoryStore.data"
+                    <option v-for="category in category"
                             :key="category.id"
                             :value="category.id">
                         {{ category.name_en }}
@@ -74,7 +77,7 @@ const categories = async () => {
                     >
                 </div>
 
-                <button @click="categories" type="button" class="btn btn-success">O'zgartirsh</button>
+                <button @click="updateCategories" type="button" class="btn btn-success">O'zgartirsh</button>
             </div>
         </div>
     </sidebar-slot>

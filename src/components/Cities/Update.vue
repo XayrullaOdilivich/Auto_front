@@ -1,28 +1,27 @@
 <script setup>
-import { onMounted, ref, watch } from 'vue'
+import {computed, onMounted, ref, watch} from 'vue'
 import SidebarSlot from "@/components/SidebarSlot.vue"
-import { useGetStore } from "@/vuex/categoryStore.js"
 import { useUpdateStore } from "@/vuex/update.js"
+import {useDynamicStore} from "@/vuex/store.js";
 
 const selectedCityId = ref("")
-const citiesStore = useGetStore()
+const store = useDynamicStore()
 const updateStore = useUpdateStore()
 
-// Update qilish uchun shahar ma'lumotlari
 const updateData = ref({
     name: '',
     text: '',
     images: null
 })
 
-// Sahifa yuklanganda ma'lumotlarni olish
+const city = computed(() => store.data?.city?.data)
+
 onMounted(async () => {
-    await citiesStore.fetchData('/cities')
+    await store.fetchData('city','/cities')
 })
 
-// Tanlangan shahar ID o'zgarsa, updateData yangilash
 watch(selectedCityId, (newId) => {
-    const city = citiesStore.data.find(city => city.id === newId)
+    const city = store.data.find(city => city.id === newId)
     if (city) {
         updateData.value.name = city.name
         updateData.value.text = city.text
@@ -32,7 +31,6 @@ watch(selectedCityId, (newId) => {
     }
 })
 
-// Faylni tanlash funksiyasi
 const handleFileChange = (event) => {
     const file = event.target.files[0]
     if (file) {
@@ -41,7 +39,6 @@ const handleFileChange = (event) => {
     }
 }
 
-// PUT so‘rov yuborish funksiyasi
 const updateCity = async () => {
     try {
         const formData = new FormData();
@@ -57,7 +54,7 @@ const updateCity = async () => {
             },
         });
 
-        await citiesStore.fetchData("/cities")
+        await store.fetchData('city','/cities')
         alert('City updated successfully!')
         console.log("Yaratildi");
     } catch (error) {
@@ -74,7 +71,7 @@ const updateCity = async () => {
                 <label class="form-label">Tanlang</label>
                 <select v-model="selectedCityId" class="form-select form-select-lg mb-3">
                     <option
-                        v-for="city in citiesStore.data"
+                        v-for="city in city"
                         :key="city.id"
                         :value="city.id">
                         {{ city.name }}

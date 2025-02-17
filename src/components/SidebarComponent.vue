@@ -12,32 +12,32 @@
                     Asosiy
                 </div>
             </router-link>
-            <router-link to="/admin/categoriy" class="menu-link">
+            <router-link to="/admin/categoriy" class="menu-link" active-class="active-menu">
                 <div class="menu">
                     Categories
                 </div>
             </router-link>
-            <router-link to="/admin/brand" class="menu-link">
+            <router-link to="/admin/brand" class="menu-link" active-class="active-menu">
                 <div class="menu">
                     Brands
                 </div>
             </router-link>
-            <router-link to="/admin/cities" class="menu-link">
+            <router-link to="/admin/cities" class="menu-link" active-class="active-menu">
                 <div class="menu">
                     Cities
                 </div>
             </router-link>
-            <router-link to="/admin/location" class="menu-link">
+            <router-link to="/admin/location" class="menu-link" active-class="active-menu">
                 <div class="menu">
                     Locations
                 </div>
             </router-link>
-            <router-link to="/admin/car" class="menu-link">
+            <router-link to="/admin/car" class="menu-link" active-class="active-menu">
                 <div class="menu">
                     Cars
                 </div>
             </router-link>
-            <router-link to="/admin/model" class="menu-link">
+            <router-link to="/admin/model" class="menu-link" active-class="active-menu">
                 <div class="menu">
                     Models
                 </div>

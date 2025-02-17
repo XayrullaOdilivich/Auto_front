@@ -1,6 +1,34 @@
 <script setup>
+import {ref, onMounted, computed} from "vue"
+import { useDelete } from "@/vuex/delete.js"
+import SidebarSlot from "@/components/SidebarSlot.vue"
+import {useDynamicStore} from "@/vuex/store.js";
 
-import SidebarSlot from "@/components/SidebarSlot.vue";
+const store = useDynamicStore()
+const deleteStore = useDelete()
+const selectedModels = ref("")
+
+const models = computed(() => store.data.models?.data)
+
+onMounted(async () => {
+    await store.fetchData('models','/models')
+});
+
+const deleteModels = async () => {
+    if (!selectedModels.value) {
+        alert("Modelni tanlang!")
+        return;
+    }
+
+    try {
+        await deleteStore.Delete(`/models/${selectedModels.value}`)
+        alert("Model   o‘chirildi!");
+
+        await store.fetchData('models','/models')
+    } catch (error) {
+        console.error("Models o‘chirishda xatolik:", error);
+    }
+};
 </script>
 
 <template>
@@ -9,13 +37,15 @@ import SidebarSlot from "@/components/SidebarSlot.vue";
             <h1 class="title">Delete_Models</h1>
             <div class="form">
                 <label for="exampleFormControlInput1" class="form-label">Qaysini o'chirmoqchisiz:</label>
-                <select class="form-select form-select-lg mb-3" aria-label="Large select example">
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                <select v-model="selectedModels" class="form-select">
+                    <option v-for="model in models"
+                            :key="model.id"
+                            :value="model.id">
+                        {{ model.name }}
+                    </option>
                 </select>
 
-                <button type="button" class="btn btn-success">O'chrish</button>
+                <button type="button" @click="deleteModels" class="btn btn-danger">O'chrish</button>
             </div>
         </div>
     </sidebar-slot>

@@ -1,15 +1,17 @@
 <script setup>
-import { ref, onMounted } from "vue"
+import {ref, onMounted, computed} from "vue"
 import { useDelete } from "@/vuex/delete.js"
-import { useGetStore } from "@/vuex/categoryStore.js"
 import SidebarSlot from "@/components/SidebarSlot.vue"
+import {useDynamicStore} from "@/vuex/store.js";
 
-const categoryStore = useGetStore()
+const store = useDynamicStore()
 const deleteStore = useDelete()
 const selectedCategory = ref("")
 
+const category = computed(() => store?.data?.category?.data)
+
 onMounted(async () => {
-    await categoryStore.fetchData("/categories")
+    await store.fetchData('category',"/categories")
 });
 
 const deleteCategory = async () => {
@@ -22,7 +24,7 @@ const deleteCategory = async () => {
         await deleteStore.Delete(`/categories/${selectedCategory.value}`)
         alert("Kategoriya o‘chirildi!");
 
-        await categoryStore.fetchData("/categories")
+        await store.fetchData('category',"/categories")
     } catch (error) {
         console.error("Kategoriya o‘chirishda xatolik:", error);
     }
@@ -36,7 +38,7 @@ const deleteCategory = async () => {
             <div class="form">
                 <label class="form-label">Qaysi kategoriyani o‘chirmoqchisiz?</label>
                 <select v-model="selectedCategory" class="form-select">
-                    <option v-for="category in categoryStore.data"
+                    <option v-for="category in category"
                             :key="category.id"
                             :value="category.id">
                         {{ category.name_en }}

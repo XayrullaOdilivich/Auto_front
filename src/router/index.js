@@ -135,10 +135,26 @@ const router = createRouter({
       path: '/admin/car',
       name: 'car',
       component: () => import('@/components/Cars/Cars.vue')
-    }, {
+    },
+    {
+      path: '/admin/car/create',
+      name: 'create',
+      component: () => import('@/components/Cars/create.vue')
+    },
+    {
       path: '/admin/car/delete',
       name: 'car-delete',
       component: () => import('@/components/Cars/Delete.vue')
+    },
+    {
+      path: '/admin/car/get',
+      name: 'car-get',
+      component: () => import('@/components/Cars/Get.vue')
+    },
+    {
+      path: '/admin/car/get-id',
+      name: 'car-get-id',
+      component: () => import('@/components/Cars/getID.vue')
     },
 
     {
@@ -155,6 +171,16 @@ const router = createRouter({
       path: '/admin/model/update',
       name: 'model-update',
       component: () => import('@/components/Models/Update.vue')
+    },
+    {
+      path: '/admin/model/get',
+      name: 'model-get',
+      component: () => import('@/components/Models/Get.vue')
+    },
+    {
+      path: '/admin/model/get-id',
+      name: 'model-get-id',
+      component: () => import('@/components/Models/GetId.vue')
     },
     {
       path: '/admin/model/delete',

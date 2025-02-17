@@ -1,15 +1,17 @@
 <script setup>
-import { ref, onMounted } from "vue"
+import {ref, onMounted, computed} from "vue"
 import { useDelete } from "@/vuex/delete.js"
-import { useGetStore } from "@/vuex/categoryStore.js"
 import SidebarSlot from "@/components/SidebarSlot.vue"
+import {useDynamicStore} from "@/vuex/store.js";
 
-const brandStore = useGetStore()
+const brandStore = useDynamicStore()
 const deleteStore = useDelete()
 const selectedBrands = ref("")
 
+const brands = computed(() => brandStore.data?.brands?.data || [])
+
 onMounted(async () => {
-    await brandStore.fetchData("/brands")
+    await brandStore.fetchData('brands',"/brands")
 });
 
 const deleteBrand = async () => {
@@ -22,7 +24,7 @@ const deleteBrand = async () => {
         await deleteStore.Delete(`/brands/${selectedBrands.value}`)
         alert("Brand o‘chirildi!");
 
-        await brandStore.fetchData("/brands")
+        await brandStore.fetchData('brands','/brands')
     } catch (error) {
         console.error("Brandlarni o‘chirishda xatolik:", error);
     }
@@ -36,7 +38,7 @@ const deleteBrand = async () => {
             <div class="form">
                 <label class="form-label">Qaysi brandni o‘chirmoqchisiz?</label>
                 <select v-model="selectedBrands" class="form-select">
-                    <option v-for="brand in brandStore.data"
+                    <option v-for="brand in brands"
                             :key="brand.id"
                             :value="brand.id">
                         {{ brand.title }}

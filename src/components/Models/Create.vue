@@ -1,10 +1,10 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import {computed, onMounted, ref} from 'vue'
 import SidebarSlot from "@/components/SidebarSlot.vue"
-import { useGetStore } from "@/vuex/categoryStore.js"
 import { useCreateStore } from "@/vuex/create.js"
+import {useDynamicStore} from "@/vuex/store.js";
 
-const brandStore = useGetStore()
+const store = useDynamicStore()
 const updateStore = useCreateStore()
 
 const updateData = ref({
@@ -12,19 +12,17 @@ const updateData = ref({
     brand_id: ''
 })
 
+const brands = computed(() => store.data.brands?.data)
+
 onMounted(async () => {
-    await brandStore.fetchData('/brands')
+    await store.fetchData('brands','/brands')
 })
 
-const models = async () => {
+const createModels = async () => {
     try {
         const formData = new FormData();
         formData.append("name", updateData.value.name);
         formData.append("brand_id", updateData.value.brand_id);
-
-        for (let pair of formData.entries()) {
-            console.log(pair[0] + ': ' + pair[1]);
-        }
 
         await updateStore.fetchPost(`/models`, formData, {
             headers: {
@@ -34,7 +32,7 @@ const models = async () => {
 
         alert("Model successfully created!");
 
-        await brandStore.fetchData("/brands")
+        await store.fetchData('brands','/brands')
     } catch (error) {
         console.error("Xatolik:", error);
     }
@@ -56,14 +54,14 @@ const models = async () => {
 
                 <label class="form-label">Qaysi brandga tegishli</label>
                 <select v-model="updateData.brand_id" class="form-select">
-                    <option v-for="brand in brandStore.data"
+                    <option v-for="brand in brands"
                             :key="brand.id"
                             :value="brand.id">
                         {{ brand.title }}
                     </option>
                 </select>
 
-                <button type="button" @click="models" class="btn btn-success">Yuborish</button>
+                <button type="button" @click="createModels" class="btn btn-success">Yuborish</button>
             </div>
         </div>
     </sidebar-slot>

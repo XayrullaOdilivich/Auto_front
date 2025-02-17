@@ -1,11 +1,11 @@
 <script setup>
 import { onMounted, ref, computed } from 'vue'
 import SidebarSlot from "@/components/SidebarSlot.vue"
-import { useGetStore } from "@/vuex/categoryStore.js"
 import { useUpdateStore } from "@/vuex/update.js"
+import {useDynamicStore} from "@/vuex/store.js";
 
 const selectedCityId = ref("")
-const citiesStore = useGetStore()
+const store = useDynamicStore()
 const updateStore = useUpdateStore()
 
 const updateData = ref({
@@ -14,12 +14,14 @@ const updateData = ref({
     images: null
 })
 
+const locations = computed(() => store.data.locations?.data)
+
 onMounted(async () => {
-    await citiesStore.fetchData('/locations')
+    await store.fetchData('locations','/locations')
 })
 
 const selectedCity = computed(() => {
-    return citiesStore.data.find(city => city.id === selectedCityId.value) || { name: '', text: '' }
+    return store.data.find(city => city.id === selectedCityId.value) || { name: '', text: '' }
 })
 
 const handleFileChange = (event) => {
@@ -45,7 +47,7 @@ const updateCity = async () => {
             },
         });
 
-        await citiesStore.fetchData("/locations")
+        await store.fetchData('locations','/locations')
         alert('Location updated successfully!')
         console.log("Yaratildi");
     } catch (error) {
@@ -62,7 +64,7 @@ const updateCity = async () => {
                 <label class="form-label">Tanlang</label>
                 <select v-model="selectedCityId" class="form-select form-select-lg mb-3">
                     <option
-                        v-for="city in citiesStore.data"
+                        v-for="city in locations"
                         :key="city.id"
                         :value="city.id">
                         {{ city.name }}
