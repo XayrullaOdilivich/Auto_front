@@ -142,6 +142,11 @@ const router = createRouter({
       component: () => import('@/components/Cars/create.vue')
     },
     {
+      path: '/admin/car/update',
+      name: 'update',
+      component: () => import('@/components/Cars/update.vue')
+    },
+    {
       path: '/admin/car/delete',
       name: 'car-delete',
       component: () => import('@/components/Cars/Delete.vue')

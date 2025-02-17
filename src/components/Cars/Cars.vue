@@ -11,7 +11,7 @@ import SidebarSlot from "@/components/SidebarSlot.vue";
                 Yaratish
             </div>
         </router-link>
-        <router-link to="/admin/categoriy" class="menu-link">
+        <router-link to="/admin/car/update" class="menu-link">
             <div class="menu">
                 O'zgartirish
             </div>

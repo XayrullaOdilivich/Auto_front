@@ -2,7 +2,7 @@
 import SidebarSlot from "@/components/SidebarSlot.vue";
 import {computed, onMounted, ref} from "vue";
 import {useDynamicStore} from "@/vuex/store.js";
-import {useCreateStore} from "@/vuex/create.js";
+import {useUpdateStore} from "@/vuex/update.js";
 
 const selectedCars = ref({
     brand_id: null,
@@ -31,8 +31,10 @@ const selectedCars = ref({
     cover: null
 })
 const store = useDynamicStore()
-const createStore = useCreateStore()
+const updateStore = useUpdateStore()
+const selectCars = ref("")
 
+const cars = computed(() => store.data.cars?.data)
 const brands = computed(() => store.data.brands?.data)
 const models = computed(() => store.data.models?.data)
 const cities = computed(() => store.data.city?.data)
@@ -40,6 +42,7 @@ const categories = computed(() => store.data.category?.data)
 const locations = computed(() => store.data.locations?.data)
 
 onMounted(async () => {
+    await store.fetchData('cars', '/cars')
     await store.fetchData('brands', '/brands')
     await store.fetchData('models', '/models')
     await store.fetchData('city', '/cities')
@@ -88,10 +91,10 @@ const createCar = async () => {
         formData.append('inclusive', selectedCars.value.inclusive);
         formData.append('cover', selectedCars.value.cover);
 
-        await createStore.fetchPost('/cars', formData, {
+        await updateStore.fetchPut(`/cars/${selectCars.value}`, formData, {
             headers: {'Content-Type': 'multipart/form-data'}
         })
-        alert("Cars created successfully.")
+        alert("Cars updated successfully.")
 
     }catch(error) {
         console.log("xatolik", error)
@@ -105,6 +108,14 @@ const createCar = async () => {
     <div class="container">
         <h1 class="title">Create Cars</h1>
         <div class="form">
+            <label class="form-label">Qaysi Carni o'zgaritramiz</label>
+            <select v-model="selectCars" class="form-select">
+                <option v-for="car in cars"
+                        :key="car.id"
+                        :value="car.id">
+                    {{ car.brand.title }} - {{ car.model.name }}
+                </option>
+            </select>
             <label for="exampleFormControlInput1" class="form-label">Brandini tanlang</label>
             <select v-model="selectedCars.brand_id" class="form-select">
                 <option
